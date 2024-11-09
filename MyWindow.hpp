@@ -8,12 +8,13 @@ using namespace std;
 
 class MyWindow {
 private:
+    
+public:
     string title;
     int locX;
     int locY;
     int sizeX;
     int sizeY;
-public:
     MyWindow(string _title,
     int _locX,
     int _locY,
