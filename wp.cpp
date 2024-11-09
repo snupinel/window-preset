@@ -3,11 +3,12 @@
 #include <vector>
 #include <Windows.h>
 #include <Psapi.h>
-#include "MyWindow.hpp"
-#include "MyWindowMemoryHandler.hpp"
+#include "WindowPreset.hpp"
+#include "PresetMemoryHandler.hpp"
 #pragma comment(lib, "Psapi.lib")  // Psapi 라이브러리 링크
 using namespace std;
 
+PresetMemoryHandler presetMemoryHandler = PresetMemoryHandler();
 
 void save();
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
@@ -15,7 +16,6 @@ int main(int argc, char *argv[])
 {
     cout<<"wp launched."<<endl;
     vector<string> args(argv, argv + argc);
-    MyWindowMemoryHandler myWindowMemoryHandler = MyWindowMemoryHandler();
 
     //cout<<argc;
     //cout<<args[1];
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
         ;
     }
     else if (args[1]=="save"){
+        //WindowPreset
         EnumWindows(EnumWindowsProc, 0);
         //save();
     }
@@ -81,6 +82,8 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
                                          // << " | Position: (" << x << ", " << y << ")"
                                          // << " | Width: " << width 
                                           << " | Height: " << height << std::endl;
+                                //std::string str(windowTitle);
+                                //presetMemoryHandler.saveWindow(MyWindow(str,x,y,width,height));
                             }
                         }
                     }
