@@ -1,0 +1,8 @@
+1
+6
+CabinetWClass C:\Windows\explorer.exe 0 46 800 600
+Chrome_WidgetWin_1 C:\Program Files\Google\Chrome\Application\chrome.exe -8 0 656 728
+Notepad C:\Windows\System32\notepad.exe 0 0 800 600
+Chrome_WidgetWin_1 C:\Program Files\Google\Chrome\Application\chrome.exe 633 0 653 727
+Chrome_WidgetWin_1 C:\Program Files\Google\Chrome\Application\chrome.exe 633 0 653 727
+Notepad C:\Windows\System32\notepad.exe 0 0 800 600

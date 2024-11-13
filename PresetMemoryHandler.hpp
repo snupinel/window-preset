@@ -12,30 +12,37 @@ class PresetMemoryHandler{
 private:
     fstream file;
     vector<WindowPreset> presets;
-    int presetCount;
 public:
     PresetMemoryHandler();
+    int length();
     void read();
     void write();
+    WindowPreset getPreset(int id);
     void savePreset(WindowPreset myPreset);
     //MyWindow getWindow(int id);
     //void DeleteWindow(int id);
 };
 PresetMemoryHandler::PresetMemoryHandler(){
+    file.open("myPresets.txt",ios::in);
     if(!file.is_open()){
-        file.open("myPresets.txt",ios::out|ios::in);
-        file<<0;
+        cout<<"not open"<<endl;
         file.close();
+        file.open("myPresets.txt",ios::out);
+        file<<0;
     }
+    file.close();
     read();
     
 }
-
+int PresetMemoryHandler::length(){
+    return presets.size();
+}
 void PresetMemoryHandler::read(){
     file.open("myPresets.txt",ios::in);
-    file>>presetCount;
+    int n;
+    file>>n;
     file.ignore();
-    for(int i=0;i<presetCount;i++){
+    for(int i=0;i<n;i++){
 
         int windowCount;
         file>>windowCount;
@@ -45,16 +52,15 @@ void PresetMemoryHandler::read(){
 
         for(int j=0;j<windowCount;j++){
 
-            string title;
+            string className, processPath;
             int locX,locY,sizeX,sizeY;
-            getline(file, title);
-            file >> locX >> locY >> sizeX >> sizeY;
+            file >>className>>processPath>>locX >> locY >> sizeX >> sizeY;
             file.ignore();
 
-            windows.push_back(MyWindow(title,locX,locY,sizeX,sizeY));
+            windows.push_back(MyWindow(className,processPath,locX,locY,sizeX,sizeY));
         }
 
-        presets.push_back(WindowPreset(windows,windowCount));
+        presets.push_back(WindowPreset(windows));
         /*
         
         */
@@ -63,15 +69,16 @@ void PresetMemoryHandler::read(){
 }
 
 void PresetMemoryHandler::write(){
-    file.open("myWindows.txt",ios::out);
-    file<<presetCount<<endl;
+    file.open("myPresets.txt",ios::out);
+    file<<length()<<endl;
+    cout<<presets.size();
+    for(int i=0;i<length();i++){
 
-    for(int i=0;i<presetCount;i++){
+        file<<presets[i].length()<<endl;
 
-        file<<presets[i].windowCount<<endl;
-
-        for(int j=0;j<presets[i].windowCount;j++){
-            file<<presets[i].windows[j].title<<endl;
+        for(int j=0;j<presets[i].length();j++){
+            file<<presets[i].windows[j].className<<" ";
+            file<<presets[i].windows[j].processPath<<" ";
             file<<presets[i].windows[j].locX<<" ";
             file<<presets[i].windows[j].locY<<" ";
             file<<presets[i].windows[j].sizeX<<" ";
@@ -87,15 +94,15 @@ void PresetMemoryHandler::savePreset(WindowPreset myPreset){
     presets.push_back(myPreset);
     write();
 }
-/*
-MyWindow PresetMemoryHandler::getWindow(int id){
+
+WindowPreset PresetMemoryHandler:: getPreset(int id){
     try{
-        return windows.at(id);
+        return presets.at(id);
     } catch (const out_of_range& e){
-        return MyWindow("",0,0,0,0);
+        return WindowPreset();
     }
 }
-
+/*
 void PresetMemoryHandler::DeleteWindow(int id){
     ;
 }*/

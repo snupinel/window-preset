@@ -3,6 +3,8 @@
 #include <vector>
 #include <Windows.h>
 #include <Psapi.h>
+#include <thread>
+#include <chrono>
 #include "WindowPreset.hpp"
 #include "PresetMemoryHandler.hpp"
 #pragma comment(lib, "Psapi.lib")  // Psapi 라이브러리 링크
@@ -10,6 +12,7 @@ using namespace std;
 
 PresetMemoryHandler presetMemoryHandler = PresetMemoryHandler();
 
+WindowPreset currentPreset = WindowPreset();
 void save();
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
 int main(int argc, char *argv[])
@@ -26,14 +29,25 @@ int main(int argc, char *argv[])
     }
     else if (args[1]=="save"){
         //WindowPreset
-        EnumWindows(EnumWindowsProc, 0);
-        //save();
+        
+        save();
+    }
+    else if (args[1]=="load"){
+        //WindowPreset
+        
+        //restoreWindows(presetMemoryHandler.getPreset(0).windows);
+    }
+    else if (args[1]=="test"){
+         
     }
     
     return 0;
 }
 void save(){
     cout<<"Saving..."<<endl;
+    currentPreset.clear();
+    EnumWindows(EnumWindowsProc, 0);
+    presetMemoryHandler.savePreset(currentPreset);
 }
 // 콜백 함수: 각 창에 대해 호출됨
 
@@ -43,7 +57,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
     // 창이 보이는 상태인지 확인
     if (IsWindowVisible(hwnd) && IsWindowEnabled(hwnd)) {
         char windowTitle[256];
+        char className[256];
         GetWindowTextA(hwnd, windowTitle, sizeof(windowTitle));
+        GetClassNameA(hwnd, className, sizeof(className));
 
         // 제목이 있는 창만 확인
         if (strlen(windowTitle) > 0) {
@@ -82,8 +98,11 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
                                          // << " | Position: (" << x << ", " << y << ")"
                                          // << " | Width: " << width 
                                           << " | Height: " << height << std::endl;
-                                //std::string str(windowTitle);
+                                string str(className);
+                                string processPath(processName);
+                                
                                 //presetMemoryHandler.saveWindow(MyWindow(str,x,y,width,height));
+                                currentPreset.add(MyWindow(str,processPath,x,y,width,height));
                             }
                         }
                     }
@@ -95,3 +114,5 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
     }
     return TRUE;  // 다음 창으로 이동
 }
+
+// 특정 MyWindow 객체에 대해 프로그램 실행 및 위치와 크기 설정

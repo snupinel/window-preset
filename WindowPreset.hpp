@@ -11,12 +11,13 @@ class MyWindow {
 private:
     
 public:
-    string title;
+    string className;
     int locX;
     int locY;
     int sizeX;
     int sizeY;
-    MyWindow(string _title,
+    string processPath;
+    MyWindow(string _className, string _processPath,
     int _locX,
     int _locY,
     int _sizeX,
@@ -24,8 +25,8 @@ public:
     //~MyWindow();            // 생성자
     //void displayMessage();   // 멤버 함수
 };
-MyWindow::MyWindow(string _title, int _locX, int _locY, int _sizeX, int _sizeY)
-    : title(_title), locX(_locX), locY(_locY), sizeX(_sizeX), sizeY(_sizeY) {
+MyWindow::MyWindow(string _className, string _processPath, int _locX, int _locY, int _sizeX, int _sizeY)
+    : className(_className), processPath(_processPath), locX(_locX), locY(_locY), sizeX(_sizeX), sizeY(_sizeY) {
     // 필요한 초기화 코드 작성
 }
 
@@ -34,12 +35,27 @@ private:
     
 public:
     vector<MyWindow> windows;
-    int windowCount;
-    WindowPreset(vector<MyWindow> _windows, int _windowCount);
+    //int windowCount;
+    int length();
+    void add(MyWindow myWindow);
+    void clear();
+    WindowPreset();
+    WindowPreset(vector<MyWindow> _windows);
 };
-WindowPreset::WindowPreset(vector<MyWindow> _windows, int _windowCount)
-:windowCount(_windowCount){
+int WindowPreset::length(){
+    return windows.size();
+}
+void WindowPreset::add(MyWindow myWindow){
+    windows.push_back(myWindow);
+}
+WindowPreset::WindowPreset(){
+    ;
+}
+WindowPreset::WindowPreset(vector<MyWindow> _windows)
+{
     windows=_windows;
 }
-
+void WindowPreset::clear(){
+    windows.clear();
+}
 #endif // 
